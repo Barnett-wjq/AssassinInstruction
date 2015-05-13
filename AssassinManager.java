@@ -10,7 +10,6 @@ public class AssassinManager{
 
     private AssassinNode firstKilled;
     private AssassinNode killed;
-    private AssassinNode nextKilled;
 
     //Contructors
     public AssassinManager(){
@@ -25,7 +24,18 @@ public class AssassinManager{
                 }else{
                     current = new AssassinNode(names.get(i),nextOne);
                     nextOne = current;
-                    if(i == 0) first = current;
+                    if(i == 0){
+                        first = current;
+                        AssassinNode c2 = first;
+                        AssassinNode c3 = null;
+                        while(c2.next != null){
+                            c3 = c2;
+                            c2 = c2.next;
+                            c2.killer = c3.name;
+                        }
+                        c2.killer = first.name;
+                        first.killer = c2.name;
+                    }
                 }
             }
         }else{
@@ -34,7 +44,7 @@ public class AssassinManager{
     }
 
     public void printKillRing(){
-        current = first;
+        AssassinNode current = first;
         while(current.next != null){
             System.out.println(current.name+" is stalking "+current.next.name);
             current = current.next;
@@ -43,15 +53,18 @@ public class AssassinManager{
     }
 
     public void printGraveyard(){
-        killed = firstKilled;
-        while(killed.next != null){
+        AssassinNode killed = firstKilled;
+        if(killed!=null){
             System.out.println(killed.name+" was killed by "+killed.killer);
-            killed = killed.next;
+            while(killed.next != null){
+                killed = killed.next;
+                System.out.println(killed.name+" was killed by "+killed.killer);
+            }
         }
     }
 
     public boolean killRingContains(String name){
-        current = first;
+        AssassinNode current = first;
         boolean mark = false;
         while (current.next != null){
             if(name.equals(current.name)){
@@ -60,19 +73,24 @@ public class AssassinManager{
             }
             current = current.next;
         }
+        if(name.equals(current.name)) mark = true;
         return mark;
     }
 
     public boolean graveyardContains(String name){
-        killed = firstKilled;
+        AssassinNode killed = firstKilled;
         boolean mark = false;
-        while (killed.next != null){
-            if(name.equals(killed.name)){
-                mark = true;
-                break;
+        if(killed != null){
+            while (killed.next != null){
+                if(name.equals(killed.name)){
+                    mark = true;
+                    break;
+                }
+                killed = killed.next;
             }
-            killed = killed.next;
+            if(name.equals(killed.name)) mark = true;
         }
+
         return mark;
     }
 
@@ -88,39 +106,46 @@ public class AssassinManager{
         return first.name;
     }
 
+
     public void kill(String name){
-        current = first;
+        AssassinNode current = first;
         String uName = name.toUpperCase();
         String uCurrentName = first.name.toUpperCase() ;
-        AssassinNode prev = null;
-        while(current.next != null){
+        if(uName.equals(uCurrentName)){
+            killed = new AssassinNode(current.name);
+            killed.killer = current.killer;
+            first = current.next;
+            if(firstKilled == null) firstKilled = killed;
+            else isFirstKilled(firstKilled,killed);
+        }
+        while (current.next != null){
+            nextOne = current;
+            current = current.next;
             uCurrentName = current.name.toUpperCase();
             if(uName.equals(uCurrentName)){
                 killed = new AssassinNode(current.name);
-                if(firstKilled == null){
-                    firstKilled = killed;
-                }else{
-                    firstKilled.next = killed;
-                }
-                break;
+                killed.killer = current.killer;
+                if(firstKilled == null) firstKilled = killed;
+                else isFirstKilled(firstKilled,killed);
+                nextOne.next = current.next;
             }
-            current = current.next;
         }
-        if(firstKilled == null){
-            firstKilled = killed;
+        uCurrentName = current.name.toUpperCase();
+        if(uName.equals(uCurrentName)){
+            killed = new AssassinNode(current.name);
+            killed.killer = current.killer;
+            if(firstKilled == null) firstKilled = killed;
+            else isFirstKilled(firstKilled,killed);
+            nextOne.next = null;
         }
 
-        while(current.next != null){
-            if(killed.name.equals(current.name)){
-                if(prev == current){
-                    first = current.next;
-                }else{
-                    prev.next = current.next.next;
-                }
-            }
-            prev = current;
-            current = current.next;
-        }
+    }
 
+    private void isFirstKilled(AssassinNode first,AssassinNode killed){
+        if(first.next == null){
+            first.next = killed;
+        }else{
+            isFirstKilled(first.next,killed);
+        }
     }
 }
