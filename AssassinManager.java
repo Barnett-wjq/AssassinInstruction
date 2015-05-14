@@ -73,7 +73,7 @@ public class AssassinManager{
             }
             current = current.next;
         }
-        if(name.equals(current.name)) mark = true;
+        if(name.toUpperCase().equals(current.name.toUpperCase())) mark = true;
         return mark;
     }
 
@@ -88,7 +88,7 @@ public class AssassinManager{
                 }
                 killed = killed.next;
             }
-            if(name.equals(killed.name)) mark = true;
+            if(name.toUpperCase().equals(killed.name.toUpperCase())) mark = true;
         }
 
         return mark;
