@@ -115,8 +115,11 @@ public class AssassinManager{
             killed = new AssassinNode(current.name);
             killed.killer = current.killer;
             first = current.next;
-            if(firstKilled == null) firstKilled = killed;
-            else isFirstKilled(firstKilled,killed);
+            if(firstKilled != null){
+                isFirstKilled(firstKilled,killed);
+            }else{
+                firstKilled = killed;
+            }
         }
         while (current.next != null){
             nextOne = current;
@@ -125,18 +128,17 @@ public class AssassinManager{
             if(uName.equals(uCurrentName)){
                 killed = new AssassinNode(current.name);
                 killed.killer = current.killer;
-                if(firstKilled == null) firstKilled = killed;
-                else isFirstKilled(firstKilled,killed);
+                if(firstKilled != null){
+                    isFirstKilled(firstKilled,killed);
+                }else{
+                    firstKilled = killed;
+                }
                 nextOne.next = current.next;
             }
         }
         uCurrentName = current.name.toUpperCase();
         if(uName.equals(uCurrentName)){
-            killed = new AssassinNode(current.name);
-            killed.killer = current.killer;
-            if(firstKilled == null) firstKilled = killed;
-            else isFirstKilled(firstKilled,killed);
-            nextOne.next = null;
+            first.killer = nextOne.name;
         }
 
     }
