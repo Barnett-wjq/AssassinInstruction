@@ -12,7 +12,7 @@ import java.util.*;
     the game is over. */
 public class AssassinMain {
    public static final String INPUT_FILENAME = "names.txt";
-   public static boolean AUTO_KILL = true; // set true to use file on next line
+   public static boolean AUTO_KILL = false; // set true to use file on next line
    public static final String KILL_LIST_FILENAME = "killOrder.txt";
     
     /** true for different results every run; false for predictable results */

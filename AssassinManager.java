@@ -67,7 +67,7 @@ public class AssassinManager{
         AssassinNode current = first;
         boolean mark = false;
         while (current.next != null){
-            if(name.equals(current.name)){
+            if(name.toUpperCase().equals(current.name.toUpperCase())){
                 mark = true;
                 break;
             }
@@ -82,7 +82,7 @@ public class AssassinManager{
         boolean mark = false;
         if(killed != null){
             while (killed.next != null){
-                if(name.equals(killed.name)){
+                if(name.toUpperCase().equals(killed.name.toUpperCase())){
                     mark = true;
                     break;
                 }
